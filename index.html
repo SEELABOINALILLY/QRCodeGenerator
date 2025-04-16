@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <h3 style="color: aliceblue;">GENERATE QR CODE</h3>
+        <input type="text" id="text" placeholder="Type your text or URL">
+        <br><br>
+        <label for="size" style="color:aliceblue">Select Size</label>&nbsp;&nbsp;
+        <select name="size" id="Size">
+            <option value="100">100x100</option>
+            <option value="200">200x200</option>
+            <option value="300">300x300</option>
+        </select>
+        <div id="qrcode"></div><br>
+        <button id="generate">Generate</button> &nbsp;&nbsp;&nbsp;&nbsp;
+        <a id="download" download="qrcode.png">
+            <button>Download</button>
+        </a>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const inputvalue = document.getElementById("text");
+        const generatebutton = document.getElementById("generate");
+        const downloadbutton = document.getElementById("download");
+        const size = document.getElementById("Size");
+        const qrcodeContainer = document.getElementById("qrcode");
+
+        generatebutton.addEventListener("click", () => {
+            let textvalue = inputvalue.value.trim();
+            const selectsize = parseInt(size.value);
+            qrcodeContainer.innerHTML = "";
+
+            if (textvalue !== "") {
+             new QRCode(qrcodeContainer, {
+                    text: textvalue,
+                    width: selectsize,
+                    height: selectsize,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff"
+                });
+                inputvalue.value="";
+            }
+        });
+
+        downloadbutton.addEventListener("click", () => {
+                const img = qrcodeContainer.querySelector("img");
+                const canvas = qrcodeContainer.querySelector("canvas");
+                if (img) {
+                    downloadbutton.href = img.src;
+                } else if (canvas) {
+                    downloadbutton.href = canvas.toDataURL("image/png");
+                }
+        });
+    </script>
+
+</body>
+</html>
